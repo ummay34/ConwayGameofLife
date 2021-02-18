@@ -92,10 +92,17 @@ void saveGridToFile(char *filename, int rows, int cols, char **grid)
 // Creates and returns a new grid that is a duplicate of the given grid
 char **copyGrid(int rows, int cols, char **grid)
 {
-    char **dup = NULL;
+    char **dup = (char **)malloc(rows * sizeof(char * ));
+    for (int i = 0; i < rows; i++){
+        dup[i] = (char *)malloc(cols * sizeof(char));
+    }
 
-	// COMPLETE THIS PART OF THIS FUNCTION
+    for (int i = 0; i < rows; i++) {
+        for (int j = 0; j < cols; j++) {
+            dup[i][j] = grid[i][j];
 
+        }
+    }
     return dup;
 }
 
