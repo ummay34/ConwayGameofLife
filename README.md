@@ -7,7 +7,7 @@ It is a Game of Life simulation that is playable through the terminal using spec
 
 -5 Functions in progress || 1: Complete 
 - LoadFile : Complete 
-- SaveFile
+- SaveFile : Complete
 - CopyGrid
 - MutateGrid
 - CountNeighbors
