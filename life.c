@@ -31,13 +31,13 @@ char *toString(int rows, int cols, char **grid)
 // Creates a grid of rows x cols and initializes the grid with data from specified file
 char **loadGridFromFile(char *filename, int *rows, int *cols)
 {
-	char **grid = NULL;
+   // char **grid = NULL;
     char buf[1024]; // max length of line in input file
     FILE *file = fopen(filename,"r");
 
     // read line from file
     fgets(buf,1024,file);
-    fclose(file); 
+    fclose(file);
 
     // get number of rows from the line read
     *rows = atoi(strtok(buf," "));
@@ -45,9 +45,28 @@ char **loadGridFromFile(char *filename, int *rows, int *cols)
     // get number of columns from the line read
     *cols = atoi(strtok(NULL," "));
 
-	// COMPLETE THIS PART OF THIS FUNCTION
+    //idk if i have to this
+    int rowCnt = *rows;
+    int ColCnt = *cols;
 
-    return grid;
+    //allocate memory for gamegrid
+    char **gameGrid = (char **)malloc(rowCnt * sizeof(char * ));
+    for (int i = 0; i < rowCnt; i++){
+        gameGrid[i] = (char *)malloc(ColCnt * sizeof(char));
+    }
+
+    //assign values from file;
+    for(int temp = 0; temp < rowCnt; temp++){
+        for(int j = 0; j < ColCnt; j++){
+            //strtok method takes input using a " " seperator
+            //[0] is needed at the end because strtok returns an array of chars(string)
+            //even though our array is only size 1 because we have 1 element between each " " seperator. we still have to use that notation to get the value.
+            gameGrid[temp][j] = strtok(NULL," ")[0];
+        }
+    }
+
+
+    return gameGrid;
 }
 
 // Saves the grid data to the specified file
