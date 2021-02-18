@@ -72,10 +72,20 @@ char **loadGridFromFile(char *filename, int *rows, int *cols)
 // Saves the grid data to the specified file
 void saveGridToFile(char *filename, int rows, int cols, char **grid)
 {
+    //"W" flag = writing files
+    //"R" Flag = reading, a = append
     FILE *file = fopen(filename,"w");
 
-	// COMPLETE THIS PART OF THIS FUNCTION
+    fprintf(file, "%d ",rows);
+    fprintf(file, "%d ",cols);
 
+    for(int i =0; i < rows; i++){
+        for(int j=0; j < cols; j++){
+            fprintf(file, "%c ",grid[i][j]);
+        }
+    }
+
+    // COMPLETE THIS PART OF THIS FUNCTION
     fclose(file);
 }
 
