@@ -106,22 +106,143 @@ char **copyGrid(int rows, int cols, char **grid)
     return dup;
 }
 
-// Mutates the given grid one generation and return a new grid
-char **mutateGrid(int rows, int cols, char **grid)
-{
-	char** newgrid = copyGrid(rows,cols,grid);
+char **mutateGrid(int rows, int cols, char **grid) {
+    char **newGrid = copyGrid(rows, cols, grid);
 
-	// COMPLETE THIS PART OF THIS FUNCTION
-
-	return newgrid;
+    for (int i = 0; i < rows; i++) {
+        for (int j = 0; j < cols; j++) {
+            int currentState;
+            int neighbors = nbrOfNeighbors(i,j,rows,cols,grid);
+            if(grid[i][j] == '1'){
+                currentState = 1;
+            }
+            else{
+                currentState = 0;
+            }
+            if(currentState == 0 && neighbors == 3){
+                newGrid[i][j] == '1';
+            }
+            else if (currentState == 1 && (neighbors < 2 || neighbors > 3)){
+                newGrid[i][j] == '0';
+            }
+            else{
+                newGrid[i][j] = grid[i][j];
+            }
+//            if (nbrOfNeighbors(i, j, rows, cols, grid) < 2 || nbrOfNeighbors(i, j, rows, cols, grid) > 3) {
+//                newGrid[i][j] = '0';
+//            }
+//            if (nbrOfNeighbors(i, j, rows, cols, grid) == 2 || nbrOfNeighbors(i, j, rows, cols, grid) == 3) {
+//                newGrid[i][j] = '1';
+//            }
+        }
+    }
+    return newGrid;
 }
 
 // Returns the number of neighbors at postion (i,j) in the grid
-int nbrOfNeighbors(int i, int j, int rows, int cols, char **grid)
-{
-	int neighbors = 0;
+int nbrOfNeighbors(int x, int y, int rows, int cols, char **grid) {
+    int neighbors = 0;
 
-	// COMPLETE THIS PART OF THIS FUNCTION
+//    for (int i = 0; i <=rows; i++) {
+//        for (int j = 0; j <= cols; j++) {
+//
+//            //left side
+//            if (grid[i][0]) {
+//                //top left
+//                if (grid[0][0]) {
+//                    if (grid[0][j + 1] == '1') {
+//                        neighbors++;
+//                    }
+//                    if (grid[i + 1][0] == '1') {
+//                        neighbors++;
+//                    }
+//                    if (grid[i + 1][j + 1] == '1') {
+//                        neighbors++;
+//                    }
+//                }
+//                //bottom left case
+//                if (grid[rows][0]) {
+//                    if (grid[i - 1][0] == '1') {
+//                        neighbors++;
+//                    }
+//                    if (grid[rows][j + 1] == '1') {
+//                        neighbors++;
+//                    }
+//                    if (grid[i - 1][j + 1] == '1') {
+//                        neighbors++;
+//                    }
+//                }
+//
+//                //middle
+//                if(grid[rows > 0][0] && grid[rows][0]){
+//
+//                }
+//
+//            }
+//            //top left
+//            if (grid[0][0]) {
+//                if (grid[0][j + 1] == '1') {
+//                    neighbors++;
+//                }
+//                if (grid[i + 1][0] == '1') {
+//                    neighbors++;
+//                }
+//                if (grid[i + 1][j + 1] == '1') {
+//                    neighbors++;
+//                }
+//            }
+//            //bottom left case
+//            if (grid[rows][0]) {
+//                if (grid[i - 1][0] == '1') {
+//                    neighbors++;
+//                }
+//                if (grid[rows][j + 1] == '1') {
+//                    neighbors++;
+//                }
+//                if (grid[i - 1][j + 1] == '1') {
+//                    neighbors++;
+//                }
+//            }
+//            //Bottom right
+//            if (grid[rows][cols]) {
+//                if (grid[i][j - 1] == '1') {
+//                    neighbors++;
+//                }
+//                if (grid[i - 1][j] == '1') {
+//                    neighbors++;
+//                }
+//                if (grid[i - 1][j - 1] == '1') {
+//                    neighbors++;
+//                }
+//            }
+//            if (grid[0][cols]) {
+//                if (grid[i][j - 1] == '1') {
+//                    neighbors++;
+//                }
+//                if (grid[i + 1][j] == '1') {
+//                    neighbors++;
+//                }
+//                if (grid[i + 1][j - 1] == '1') {
+//                    neighbors++;
+//                }
+//            }
+//
+//
+//        }
+//    }
 
-	return neighbors;
+    for(int i = -1; i < 2; i++){
+        for(int j = 0; j < 2; j++){
+            int col = (x + i + cols) % cols;
+            int row = (y + j + rows) % rows;
+            if(grid[i][j] == '1'){
+                neighbors++;
+            }
+        }
+    }
+
+
+    //subtract 1 since we dont count the current cell
+    neighbors--;
+    return neighbors;
 }
