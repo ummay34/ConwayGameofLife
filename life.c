@@ -246,7 +246,6 @@ int nbrOfNeighbors(int x, int y, int rows, int cols, char **grid) {
     }
 
 
-    //subtract 1 since we dont count the current cell
-  
+    //subtract 1 since we dont count the current cell 
     return neighbors;
 }
