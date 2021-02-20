@@ -235,7 +235,7 @@ int nbrOfNeighbors(int x, int y, int rows, int cols, char **grid) {
         for(int j = 0; j < 2; j++){
             int col = (x + i + cols) % cols;
             int row = (y + j + rows) % rows;
-            if(grid[i][j] == '1'){
+            if(grid[row][col] == '1'){
                 neighbors++;
             }
         }
