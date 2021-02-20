@@ -147,105 +147,172 @@ int wrap(int x,int N){
 int nbrOfNeighbors(int x, int y, int rows, int cols, char **grid) {
     int neighbors = 0;
 
-//    for (int i = 0; i <=rows; i++) {
-//        for (int j = 0; j <= cols; j++) {
-//
-//            //left side
-//            if (grid[i][0]) {
-//                //top left
-//                if (grid[0][0]) {
-//                    if (grid[0][j + 1] == '1') {
-//                        neighbors++;
-//                    }
-//                    if (grid[i + 1][0] == '1') {
-//                        neighbors++;
-//                    }
-//                    if (grid[i + 1][j + 1] == '1') {
-//                        neighbors++;
-//                    }
-//                }
-//                //bottom left case
-//                if (grid[rows][0]) {
-//                    if (grid[i - 1][0] == '1') {
-//                        neighbors++;
-//                    }
-//                    if (grid[rows][j + 1] == '1') {
-//                        neighbors++;
-//                    }
-//                    if (grid[i - 1][j + 1] == '1') {
-//                        neighbors++;
-//                    }
-//                }
-//
-//                //middle
-//                if(grid[rows > 0][0] && grid[rows][0]){
-//
-//                }
-//
-//            }
-//            //top left
-//            if (grid[0][0]) {
-//                if (grid[0][j + 1] == '1') {
-//                    neighbors++;
-//                }
-//                if (grid[i + 1][0] == '1') {
-//                    neighbors++;
-//                }
-//                if (grid[i + 1][j + 1] == '1') {
-//                    neighbors++;
-//                }
-//            }
-//            //bottom left case
-//            if (grid[rows][0]) {
-//                if (grid[i - 1][0] == '1') {
-//                    neighbors++;
-//                }
-//                if (grid[rows][j + 1] == '1') {
-//                    neighbors++;
-//                }
-//                if (grid[i - 1][j + 1] == '1') {
-//                    neighbors++;
-//                }
-//            }
-//            //Bottom right
-//            if (grid[rows][cols]) {
-//                if (grid[i][j - 1] == '1') {
-//                    neighbors++;
-//                }
-//                if (grid[i - 1][j] == '1') {
-//                    neighbors++;
-//                }
-//                if (grid[i - 1][j - 1] == '1') {
-//                    neighbors++;
-//                }
-//            }
-//            if (grid[0][cols]) {
-//                if (grid[i][j - 1] == '1') {
-//                    neighbors++;
-//                }
-//                if (grid[i + 1][j] == '1') {
-//                    neighbors++;
-//                }
-//                if (grid[i + 1][j - 1] == '1') {
-//                    neighbors++;
-//                }
-//            }
-//
-//
-//        }
-//    }
+    for (int i = 0; i < rows; i++) {
+        for (int j = 0; j < cols; j++) {
 
-    for(int i = -1; i < 2; i++){
-        for(int j = 0; j < 2; j++){
-			int col = wrap((x+i+cols),cols);
-			int row = wrap((y + j + rows),cols);
-            if(grid[row][col] == '1'){
-                neighbors++;
+            //left side
+            if (grid[i][0]) {
+                //top left
+                if (grid[0][0]) {
+                    if (grid[0][j + 1] == '1') {
+                        neighbors++;
+                    }
+                    if (grid[i + 1][0] == '1') {
+                        neighbors++;
+                    }
+                    if (grid[i + 1][j + 1] == '1') {
+                        neighbors++;
+                    }
+                }
+                //bottom left case
+                if (grid[rows][0]) {
+                    if (grid[i - 1][0] == '1') {
+                        neighbors++;
+                    }
+                    if (grid[rows][j + 1] == '1') {
+                        neighbors++;
+                    }
+                    if (grid[i - 1][j + 1] == '1') {
+                        neighbors++;
+                    }
+                }
+
+                //left side middle(not top left or bottom left)
+                if (grid[i < rows][0] && grid[i > 0][0]) {
+                    if (grid[i - 1][j] == '1') {
+                        neighbors++;
+                    }
+                    if (grid[i + 1][j] == '1') {
+                        neighbors++;
+                    }
+                    if (grid[i][j + 1] == '1') {
+                        neighbors++;
+                    }
+                    if (grid[i - 1][j + 1] == '1') {
+                        neighbors++;
+                    }
+                    if (grid[i + 1][j + 1] == '1') {
+                        neighbors++;
+                    }
+
+                }
             }
+
+            //checks right side
+            else if (grid[i][cols]) {
+
+                //Bottom right
+                if (grid[rows][cols]) {
+                    if (grid[i][j - 1] == '1') {
+                        neighbors++;
+                    }
+                    if (grid[i - 1][j] == '1') {
+                        neighbors++;
+                    }
+                    if (grid[i - 1][j - 1] == '1') {
+                        neighbors++;
+                    }
+                }
+                //top right
+                if (grid[0][cols]) {
+                    if (grid[i][j - 1] == '1') {
+                        neighbors++;
+                    }
+                    if (grid[i + 1][j] == '1') {
+                        neighbors++;
+                    }
+                    if (grid[i + 1][j - 1] == '1') {
+                        neighbors++;
+                    }
+                        //if not top right or bottom right, do entire right side
+                     if (grid[i < rows][cols] && grid[i > 0][cols]) {
+                        if (grid[i - 1][cols] == '1') {
+                            neighbors++;
+                        }
+                        if (grid[i + 1][cols] == '1') {
+                            neighbors++;
+                        }
+                        if (grid[i][cols - 1] == '1') {
+                            neighbors++;
+                        }
+                        if (grid[i - 1][cols - 1] == '1') {
+                            neighbors++;
+                        }
+                        if (grid[i + 1][cols - 1] == '1') {
+                            neighbors++;
+                        }
+
+                    }
+                }
+            }
+            //Checks top row, but not top left or top right since theyre accounted for.
+            else if (grid[0][j > 0] && grid[0][j < cols]) {
+                if (grid[0][j - 1] == '1') {
+                    neighbors++;
+                }
+                if (grid[0][j + 1] == '1') {
+                    neighbors++;
+                }
+                if (grid[i + 1][j] == '1') {
+                    neighbors++;
+                }
+                if (grid[i + 1][j - 1] == '1') {
+                    neighbors++;
+                }
+                if (grid[i + 1][j + 1] == '1') {
+                    neighbors++;
+                }
+            }
+
+            //Bottom row, except bottom left and bottom
+            else if (grid[rows][j > 0] && grid[rows][j < cols]) {
+                if (grid[rows][j - 1] == '1') {
+                    neighbors++;
+                }
+                if (grid[rows][j + 1] == '1') {
+                    neighbors++;
+                }
+                if (grid[i - 1][j] == '1') {
+                    neighbors++;
+                }
+                if (grid[i - 1][j - 1] == '1') {
+                    neighbors++;
+                }
+                if (grid[i - 1][j + 1] == '1') {
+                    neighbors++;
+                }
+            }
+            else{
+                if(grid[i-1][j] == '1'){
+                    neighbors++;
+                }
+                if(grid[i+1][j] == '1'){
+                    neighbors++;
+                }
+                if(grid[i][j+1] == '1'){
+                    neighbors++;
+                }
+                if(grid[i][j-1] == '1'){
+                    neighbors++;
+                }
+                if(grid[i-1][j-1] == '1'){
+                    neighbors++;
+                }
+                if(grid[i-1][j+1] == '1'){
+                    neighbors++;
+                }
+                if(grid[i+1][j-1] == '1'){
+                    neighbors++;
+                }
+                if(grid[i+1][j+1] == '1'){
+                    neighbors++;
+                }
+            }
+
+
         }
     }
-
-
-    //subtract 1 since we dont count the current cell 
+    //subtract 1 since we dont count the current cell
+    neighbors--; 
     return neighbors;
 }
