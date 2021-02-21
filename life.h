@@ -29,7 +29,7 @@ char **copyGrid(int rows, int cols, char **grid);
 // Mutates the given grid one generation and return a new grid
 char **mutateGrid(int rows, int cols, char **grid);
 
-// Returns the number of neighbors at postion (i,j) in the grid
+// Returns the number of neighbors at position (i,j) in the grid
 int nbrOfNeighbors(int i, int j, int rows, int cols, char **grid);
 
 #endif /* LIFE_H_ */

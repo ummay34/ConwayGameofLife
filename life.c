@@ -1,251 +1,154 @@
 //***************************************************
 // Filename: life.c
 //
-// Author(s): 
+// Author(s): Ummayair Ahmad, Kyle Jacobson
 //***************************************************
 
 #include "life.h"
 
 // Constructs and returns a string (printable) representation of the grid
-char *toString(int rows, int cols, char **grid)
-{
-	char *str = (char *) calloc(4 * rows * cols, sizeof(char));
-	char *ptr = str;
+char *toString(int rows, int cols, char **grid) {
+    char *str = (char *) calloc(4 * rows * cols, sizeof(char));
+    char *ptr = str;
 
-	for (int i = 0; i < rows; i++) {
-		for (int j = 0; j < cols; j++) {
+    for (int i = 0; i < rows; i++) {
+        for (int j = 0; j < cols; j++) {
             if (grid[i][j] == '0') {
-                sprintf(ptr," . ");
+                sprintf(ptr, " . ");
             } else {
-                sprintf(ptr," X ");
+                sprintf(ptr, " X ");
             }
-			ptr += 3;;
-		}
-		sprintf(ptr,"\n");
-		ptr++;
-	}
+            ptr += 3;;
+        }
+        sprintf(ptr, "\n");
+        ptr++;
+    }
 
-	return str;
+    return str;
 }
 
 // Creates a grid of rows x cols and initializes the grid with data from specified file
-char **loadGridFromFile(char *filename, int *rows, int *cols)
-{
-   // char **grid = NULL;
+char **loadGridFromFile(char *filename, int *rows, int *cols) {
+    // Char **grid = NULL;
     char buf[1024]; // max length of line in input file
-    FILE *file = fopen(filename,"r");
+    FILE *file = fopen(filename, "r");
 
-    // read line from file
-    fgets(buf,1024,file);
+    // Read line from file.
+    fgets(buf, 1024, file);
     fclose(file);
 
-    // get number of rows from the line read
-    *rows = atoi(strtok(buf," "));
+    // Get number of rows from the line read.
+    *rows = atoi(strtok(buf, " "));
 
-    // get number of columns from the line read
-    *cols = atoi(strtok(NULL," "));
+    // Get number of columns from the line read.
+    *cols = atoi(strtok(NULL, " "));
 
-    //idk if i have to this
-    int rowCnt = *rows;
-    int ColCnt = *cols;
-
-    //allocate memory for gamegrid
-    char **gameGrid = (char **)malloc(rowCnt * sizeof(char * ));
-    for (int i = 0; i < rowCnt; i++){
-        gameGrid[i] = (char *)malloc(ColCnt * sizeof(char));
+    // Create the base gameGrid and allocate memory.
+    char **gameGrid = (char **) malloc(*rows * sizeof(char *));
+    for (int i = 0; i < *rows; i++) {
+        gameGrid[i] = (char *) malloc(*cols * sizeof(char));
     }
 
-    //assign values from file;
-    for(int temp = 0; temp < rowCnt; temp++){
-        for(int j = 0; j < ColCnt; j++){
-            //strtok method takes input using a " " seperator
-            //[0] is needed at the end because strtok returns an array of chars(string)
-            //even though our array is only size 1 because we have 1 element between each " " seperator. we still have to use that notation to get the value.
-            gameGrid[temp][j] = strtok(NULL," ")[0];
+    // Iterate and assign values from .gol files to the gameGrid.
+    for (int temp = 0; temp < *rows; temp++) {
+        // Iterates through the columns on the gameGrid.
+        for (int j = 0; j < *cols; j++) {
+            // Takes value from the .gol file and places it on the gameGrid.
+            gameGrid[temp][j] = strtok(NULL, " ")[0];
         }
     }
-
-
+    // Return the gameGrid to the user.
     return gameGrid;
 }
 
 // Saves the grid data to the specified file
-void saveGridToFile(char *filename, int rows, int cols, char **grid)
-{
+void saveGridToFile(char *filename, int rows, int cols, char **grid) {
     //"W" flag = writing files
     //"R" Flag = reading, a = append
-    FILE *file = fopen(filename,"w");
+    FILE *file = fopen(filename, "w");
 
-    fprintf(file, "%d ",rows);
-    fprintf(file, "%d ",cols);
+    // Prints the rows and columns of the grid.
+    fprintf(file, "%d ", rows);
+    fprintf(file, "%d ", cols);
 
-    for(int i =0; i < rows; i++){
-        for(int j=0; j < cols; j++){
-            fprintf(file, "%c ",grid[i][j]);
+    // Iterates through the rows of the grid.
+    for (int i = 0; i < rows; i++) {
+        // Iterates through the columns of the grid.
+        for (int j = 0; j < cols; j++) {
+            // Prints the char at the current position on the grid.
+            fprintf(file, "%c ", grid[i][j]);
         }
     }
-
-    // COMPLETE THIS PART OF THIS FUNCTION
+    // Close the file that is being used.
     fclose(file);
 }
 
 // Creates and returns a new grid that is a duplicate of the given grid
-char **copyGrid(int rows, int cols, char **grid)
-{
-    char **dup = (char **)malloc(rows * sizeof(char * ));
-    for (int i = 0; i < rows; i++){
-        dup[i] = (char *)malloc(cols * sizeof(char));
+char **copyGrid(int rows, int cols, char **grid) {
+    // Create a duplicate grid and allocate memory.
+    char **dup = (char **) malloc(rows * sizeof(char *));
+    for (int i = 0; i < rows; i++) {
+        dup[i] = (char *) malloc(cols * sizeof(char));
     }
 
+    // Iterates through the rows of the grid.
     for (int i = 0; i < rows; i++) {
+        // Iterates through the columns of the grid.
         for (int j = 0; j < cols; j++) {
+            // Take the current value on gameGrid and transfer it to duplicate grid.
             dup[i][j] = grid[i][j];
-
         }
     }
+    // Return the duplicate grid to the user.
     return dup;
 }
 
 char **mutateGrid(int rows, int cols, char **grid) {
+    // Take the duplicate grid and assign it to a newly created grid.
     char **newGrid = copyGrid(rows, cols, grid);
 
+    // Iterates through the rows of the grid.
     for (int i = 0; i < rows; i++) {
+        // Iterates through the columns of the grid.
         for (int j = 0; j < cols; j++) {
-            int currentState;
-            int neighbors = nbrOfNeighbors(i,j,rows,cols,grid);
-            if(grid[i][j] == '1'){
-                currentState = 1;
-            }
-            else{
-                currentState = 0;
-            }
-            if(currentState == 0 && neighbors == 3){
-                newGrid[i][j] = '1';
-            }
-            else if (currentState == 1 && (neighbors < 2 || neighbors > 3)){
+            // Obtain the number of neighbors that exist around a current cell.
+            int neighbors = nbrOfNeighbors(i, j, rows, cols, newGrid);
+
+            // A live cell with less than two live neighbors or more than three neighbors dies.
+            if ((grid[i][j] == '1' && neighbors < 2) || (grid[i][j] == '1' && neighbors > 3)) {
                 newGrid[i][j] = '0';
             }
-            else{
-                newGrid[i][j] = grid[i][j];
+
+            // A live cell with two or three live neighbors lives.
+            if ((grid[i][j] == '1' && neighbors == 2) || (grid[i][j] == '1' && neighbors == 3)) {
+                newGrid[i][j] = '1';
             }
-//            if (nbrOfNeighbors(i, j, rows, cols, grid) < 2 || nbrOfNeighbors(i, j, rows, cols, grid) > 3) {
-//                newGrid[i][j] = '0';
-//            }
-//            if (nbrOfNeighbors(i, j, rows, cols, grid) == 2 || nbrOfNeighbors(i, j, rows, cols, grid) == 3) {
-//                newGrid[i][j] = '1';
-//            }
+
+            // A dead cell with three live neighbors becomes live.
+            if (grid[i][j] == '0' && neighbors == 3) {
+                newGrid[i][j] = '1';
+            }
         }
     }
+
+    // Return the newly created grid for the user.
     return newGrid;
 }
 
-int wrap(int x,int N){
-    return (x % N + N) % N;
-}
-
-// Returns the number of neighbors at postion (i,j) in the grid
+// Returns the number of neighbors at position (i,j) in the grid.
 int nbrOfNeighbors(int x, int y, int rows, int cols, char **grid) {
+    // Instantiation of neighbors variable.
     int neighbors = 0;
 
-//    for (int i = 0; i <=rows; i++) {
-//        for (int j = 0; j <= cols; j++) {
-//
-//            //left side
-//            if (grid[i][0]) {
-//                //top left
-//                if (grid[0][0]) {
-//                    if (grid[0][j + 1] == '1') {
-//                        neighbors++;
-//                    }
-//                    if (grid[i + 1][0] == '1') {
-//                        neighbors++;
-//                    }
-//                    if (grid[i + 1][j + 1] == '1') {
-//                        neighbors++;
-//                    }
-//                }
-//                //bottom left case
-//                if (grid[rows][0]) {
-//                    if (grid[i - 1][0] == '1') {
-//                        neighbors++;
-//                    }
-//                    if (grid[rows][j + 1] == '1') {
-//                        neighbors++;
-//                    }
-//                    if (grid[i - 1][j + 1] == '1') {
-//                        neighbors++;
-//                    }
-//                }
-//
-//                //middle
-//                if(grid[rows > 0][0] && grid[rows][0]){
-//
-//                }
-//
-//            }
-//            //top left
-//            if (grid[0][0]) {
-//                if (grid[0][j + 1] == '1') {
-//                    neighbors++;
-//                }
-//                if (grid[i + 1][0] == '1') {
-//                    neighbors++;
-//                }
-//                if (grid[i + 1][j + 1] == '1') {
-//                    neighbors++;
-//                }
-//            }
-//            //bottom left case
-//            if (grid[rows][0]) {
-//                if (grid[i - 1][0] == '1') {
-//                    neighbors++;
-//                }
-//                if (grid[rows][j + 1] == '1') {
-//                    neighbors++;
-//                }
-//                if (grid[i - 1][j + 1] == '1') {
-//                    neighbors++;
-//                }
-//            }
-//            //Bottom right
-//            if (grid[rows][cols]) {
-//                if (grid[i][j - 1] == '1') {
-//                    neighbors++;
-//                }
-//                if (grid[i - 1][j] == '1') {
-//                    neighbors++;
-//                }
-//                if (grid[i - 1][j - 1] == '1') {
-//                    neighbors++;
-//                }
-//            }
-//            if (grid[0][cols]) {
-//                if (grid[i][j - 1] == '1') {
-//                    neighbors++;
-//                }
-//                if (grid[i + 1][j] == '1') {
-//                    neighbors++;
-//                }
-//                if (grid[i + 1][j - 1] == '1') {
-//                    neighbors++;
-//                }
-//            }
-//
-//
-//        }
-//    }
-
-    for(int i = -1; i < 2; i++){
-        for(int j = -1; j < 2; j++){
-		int col = wrap((x+j+cols),cols);
-		int row = wrap((y + i + rows),rows);
-            if(grid[row][col] == '1'){
+    // Iterates around the current cell.
+    for(int i = x - 1; i <= x + 1; i++){
+        for(int j = y - 1; j <= y + 1; j++){
+            // If the neighbor contains a 1, add to the neighbors.
+            if(grid[(i + rows) % rows][(j + rows) % rows] == '1'){
                 neighbors++;
             }
         }
     }
-
-
-    //subtract 1 since we dont count the current cell  
+    // Return neighbors to the user.
     return neighbors;
 }
