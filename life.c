@@ -140,7 +140,7 @@ char **mutateGrid(int rows, int cols, char **grid) {
 }
 
 int wrap(int x,int N){
-    return (x % N + N) %N;
+    return (x % N + N) % N;
 }
 
 // Returns the number of neighbors at postion (i,j) in the grid
@@ -236,9 +236,9 @@ int nbrOfNeighbors(int x, int y, int rows, int cols, char **grid) {
 //    }
 
     for(int i = -1; i < 2; i++){
-        for(int j = 0; j < 2; j++){
-			int col = wrap((x+i+cols),cols);
-			int row = wrap((y + j + rows),cols);
+        for(int j = -1; j < 2; j++){
+		int col = wrap((x+j+cols),cols);
+		int row = wrap((y + i + rows),rows);
             if(grid[row][col] == '1'){
                 neighbors++;
             }
@@ -246,6 +246,6 @@ int nbrOfNeighbors(int x, int y, int rows, int cols, char **grid) {
     }
 
 
-    //subtract 1 since we dont count the current cell 
+    //subtract 1 since we dont count the current cell  
     return neighbors;
 }
