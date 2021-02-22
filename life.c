@@ -56,7 +56,6 @@ char **loadGridFromFile(char *filename, int *rows, int *cols) {
             gameGrid[temp][j] = strtok(NULL, " ")[0];
         }
     }
-
     // Return the gameGrid to the user.
     return gameGrid;
 }
@@ -79,7 +78,6 @@ void saveGridToFile(char *filename, int rows, int cols, char **grid) {
             fprintf(file, "%c ", grid[i][j]);
         }
     }
-
     // Close the file that is being used.
     fclose(file);
 }
@@ -109,30 +107,30 @@ char **mutateGrid(int rows, int cols, char **grid) {
     // Take the duplicate grid and assign it to a newly created grid.
     char **newGrid = copyGrid(rows, cols, grid);
 
-    // Iterates through the rows of the grid.
+    // Iterates through  the rows of the grid.
     for (int i = 0; i < rows; i++) {
         // Iterates through the columns of the grid.
         for (int j = 0; j < cols; j++) {
             // Obtain the number of neighbors that exist around a current cell.
             int neighbors = nbrOfNeighbors(i, j, rows, cols, newGrid);
 
-            // A live cell with less than two live neighbors or more than three neighbors dies.
-            if ((grid[i][j] == '1' && neighbors < 2) || (grid[i][j] == '1' && neighbors > 3)) {
-                newGrid[i][j] = '0';
+            // If the cell is currently live.
+            if (grid[i][j] == '1') {
+                // A live cell with less than two live neighbors or more than three neighbors dies.
+                if (neighbors < 2 || neighbors > 3) {
+                    newGrid[i][j] = '0';
+                }
             }
 
-            // A live cell with two or three live neighbors lives.
-            if ((grid[i][j] == '1' && neighbors == 2) || (grid[i][j] == '1' && neighbors == 3)) {
-                newGrid[i][j] = '1';
-            }
-
-            // A dead cell with three live neighbors becomes live.
-            if (grid[i][j] == '0' && neighbors == 3) {
-                newGrid[i][j] = '1';
+            // If the cell is currently dead.
+            else{
+                // A dead cell with three live neighbors becomes live.
+                if (neighbors == 3) {
+                    newGrid[i][j] = '1';
+                }
             }
         }
     }
-
     // Return the newly created grid for the user.
     return newGrid;
 }
@@ -149,7 +147,7 @@ int nbrOfNeighbors(int x, int y, int rows, int cols, char **grid) {
             // Checks if current iteration is current position (x,y).
             if (!(i == 0 && j == 0)) {
                 // Checks if surrounding cells are live.
-                if (grid[(x + i + rows) % rows][(y + j + cols) % cols] == '1'){
+                if (grid[(x + i + rows) % rows][(y + j + cols) % cols] == '1') {
                     // If so, add to the neighbors count.
                     neighbors++;
                 }
