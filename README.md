@@ -20,9 +20,9 @@ To run the game, first make sure
   
 
 
--5 Functions in progress || 1: Complete 
+-5 Functions in progress || 
 - LoadFile : Complete 
 - SaveFile : Complete
-- CopyGrid
-- MutateGrid
-- CountNeighbors
+- CopyGrid : Complete
+- MutateGrid : 80% done 
+- CountNeighbors : Complete
