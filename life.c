@@ -137,66 +137,25 @@ char **mutateGrid(int rows, int cols, char **grid) {
     return newGrid;
 }
 
-// Wrap function helps with finding neighbors near edges.
-int wrap(int x, int N) {
-    return (x % N + N) % N;
-}
-
-// Returns the number of neighbors at position (i,j) in the grid.
+// Counts the number of neighbors around a specific cell.
 int nbrOfNeighbors(int x, int y, int rows, int cols, char **grid) {
-    // Instantiation of neighbors variable.
+    // Variable for tracking the count of neighbors.
     int neighbors = 0;
 
-    // Up Left
-    if (grid[x - 1][y - 1] == '1') {
-        neighbors++;
+    // Iterate through the rows.
+    for (int i = -1; i < 2; i++) {
+        // Iterate through the columns.
+        for (int j = -1; j < 2; j++) {
+            // Checks if current iteration is current position (x,y).
+            if (!(i == 0 && j == 0)) {
+                // Checks if surrounding cells are live.
+                if (grid[(x + i + rows) % rows][(y + j + cols) % cols] == '1'){
+                    // If so, add to the neighbors count.
+                    neighbors++;
+                }
+            }
+        }
     }
-
-    // Up
-    if (grid[x - 1][y] == '1') {
-        neighbors++;
-    }
-
-    // Up Right
-    if (grid[x - 1][y + 1] == '1') {
-        neighbors++;
-    }
-
-    // Left
-    if (grid[x][y - 1] == '1') {
-        neighbors++;
-    }
-
-    // Right
-    if (grid[x][y + 1] == '1') {
-        neighbors++;
-    }
-
-    // Down Left
-    if (grid[x + 1][y - 1] == '1') {
-        neighbors++;
-    }
-
-    // Down
-    if (grid[x + 1][y] == '1') {
-        neighbors++;
-    }
-
-    // Down Right
-    if (grid[x + 1][y + 1] == '1') {
-        neighbors++;
-    }
-
-    //    // Iterates around the current cell.
-//    for(int i = x - 1; i <= x + 1; i++){
-//        for(int j = y - 1; j <= y + 1; j++){
-//            // If the neighbor contains a 1, add to the neighbors.
-//            if((grid[(x + rows) % rows][(j + cols) % cols]) == '1'){
-//                neighbors++;
-//            }
-//        }
-//    }
-//
-//    // Return neighbors to the user.
+    // Return neighbors to the user.
     return neighbors;
 }
