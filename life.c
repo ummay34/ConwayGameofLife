@@ -112,13 +112,18 @@ char **mutateGrid(int rows, int cols, char **grid) {
         // Iterates through the columns of the grid.
         for (int j = 0; j < cols; j++) {
             // Obtain the number of neighbors that exist around a current cell.
-            int neighbors = nbrOfNeighbors(i, j, rows, cols, newGrid);
+            int neighbors = nbrOfNeighbors(i, j, rows, cols, grid);
 
             // If the cell is currently live.
             if (grid[i][j] == '1') {
                 // A live cell with less than two live neighbors or more than three neighbors dies.
                 if (neighbors < 2 || neighbors > 3) {
                     newGrid[i][j] = '0';
+                }
+
+                // A live cell with two or three live neighbors lives.
+                if (neighbors == 2 || neighbors == 3) {
+                    newGrid[i][j] = '1';
                 }
             }
 
