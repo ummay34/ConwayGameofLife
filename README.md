@@ -7,7 +7,9 @@ It is a Game of Life simulation that is playable through the terminal using spec
 
 To run the game, first make sure
 1) gcc is installed 
+
 2)run the following command to compile program and generate a executable named "driver":  gcc -Wall -std=c99 -o driver driver.c life.c
+
 3) Execute program using
   ./driver (filename) 
   
@@ -20,9 +22,9 @@ To run the game, first make sure
   
 
 
--5 Functions in progress || 1: Complete 
+-5 Functions in progress || 
 - LoadFile : Complete 
 - SaveFile : Complete
-- CopyGrid
-- MutateGrid
-- CountNeighbors
+- CopyGrid : Complete
+- MutateGrid : 80% done 
+- CountNeighbors : Complete
