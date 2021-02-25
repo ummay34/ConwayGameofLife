@@ -20,11 +20,3 @@ To run the game, first make sure
   The rest of the ints will be the actual board we are loading, where 0 = dead cells and 1 = live cells. This must be proportionate to the size of the grid(Rows*cols)
   For example, in the example grid above we have a 3x3 board, so we should have 9 ints representing the whole board. 
   
-
-
--5 Functions in progress || 
-- LoadFile : Complete 
-- SaveFile : Complete
-- CopyGrid : Complete
-- MutateGrid : 80% done 
-- CountNeighbors : Complete
